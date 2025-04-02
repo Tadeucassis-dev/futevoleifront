@@ -36,7 +36,7 @@ const AlunoForm: React.FC = () => {
   return (
     <Box p={4} maxW="400px" mx="auto">
       <form onSubmit={handleSubmit}>
-        <VStack spacing={4}>
+        <VStack >
           <FormControl>
             <FormLabel>Nome</FormLabel>
             <Input name="nome" value={aluno.nome} onChange={handleChange} required />
