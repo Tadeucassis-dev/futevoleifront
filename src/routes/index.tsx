@@ -9,6 +9,8 @@ import AlunoList from '../pages/AlunoList';
 import AlunoForm from '../pages/AlunoForm';
 import CheckinList from '../pages/CheckinList';
 import theme from '../theme';
+import Signin from '../pages/Signin';
+import Register from '../pages/Register';
 
 export function AppRoutes() {
   return (
@@ -22,6 +24,8 @@ export function AppRoutes() {
               <Route path="/alunos" element={<AlunoList />} />
               <Route path="/alunos/novo" element={<AlunoForm />} />
               <Route path="/checkins" element={<CheckinList alunoId={1} />} />
+              <Route path="/signin" element={<Signin />} />
+              <Route path="/register" element={<Register />} />
             </Routes>
           </Box>
           <Footer />
