@@ -86,17 +86,7 @@ export function Home() {
           >
             Faça Parte do Time
           </Button>
-          <Button
-            as={NavLink}
-            to="/checkins"
-            size={buttonSize}
-            colorScheme="whiteAlpha"
-            variant="outline"
-            fontWeight="bold"
-            _hover={{ transform: 'scale(1.05)', transition: '0.2s' }}
-          >
-            Veja os Check-ins
-          </Button>
+          
         </Flex>
         <Text fontSize="18px" color="gray.200" mt={4}>
           Treinos incríveis, competições emocionantes e uma vibe única à beira do lago.

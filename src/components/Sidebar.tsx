@@ -1,5 +1,5 @@
 // components/Sidebar.tsx
-import React from 'react';
+import React from "react";
 import {
   Drawer,
   DrawerBody,
@@ -9,8 +9,8 @@ import {
   DrawerCloseButton,
   VStack,
   Button,
-} from '@chakra-ui/react';
-import { NavLink } from 'react-router-dom';
+} from "@chakra-ui/react";
+import { NavLink } from "react-router-dom";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -21,17 +21,17 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay />
-      <DrawerContent bg="gray.800" color="white">
+      <DrawerContent bg="gray.800" color="white" >
         <DrawerCloseButton />
-        <DrawerHeader>Futevôlei do Lago</DrawerHeader>
+        <DrawerHeader mb={10}>Futevôlei do Lago</DrawerHeader>
         <DrawerBody>
-          <VStack spacing={4} align="stretch">
+          <VStack spacing={6} align="stretch">
             <Button
               as={NavLink}
               to="/"
-              variant="ghost"
               justifyContent="flex-start"
-              _activeLink={{ bg: 'gray.700' }}
+              _activeLink={{ bg: "yellow.400" }}
+              _hover={{ bg: "yellow.300" }}
               onClick={onClose}
             >
               Home
@@ -39,9 +39,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             <Button
               as={NavLink}
               to="/alunos"
-              variant="ghost"
               justifyContent="flex-start"
-              _activeLink={{ bg: 'gray.700' }}
+              _activeLink={{ bg: "yellow.400" }}
+              _hover={{ bg: "yellow.300" }}
               onClick={onClose}
             >
               Lista de Alunos
@@ -49,9 +49,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             <Button
               as={NavLink}
               to="/alunos/novo"
-              variant="ghost"
               justifyContent="flex-start"
-              _activeLink={{ bg: 'gray.700' }}
+              _activeLink={{ bg: "yellow.400" }}
+              _hover={{ bg: "yellow.300" }}
               onClick={onClose}
             >
               Novo Aluno
@@ -59,14 +59,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             <Button
               as={NavLink}
               to="/checkins"
-              variant="ghost"
               justifyContent="flex-start"
-              _activeLink={{ bg: 'gray.700' }}
+              _activeLink={{ bg: "yellow.400" }}
+              _hover={{ bg: "yellow.300" }}
               onClick={onClose}
             >
               Check-ins
             </Button>
-          </VStack>
+          </VStack> 
         </DrawerBody>
       </DrawerContent>
     </Drawer>

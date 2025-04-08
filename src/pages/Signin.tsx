@@ -1,4 +1,3 @@
-// Signin.tsx
 import React, { FormEvent, useState } from 'react';
 import {
   Box,
@@ -13,7 +12,8 @@ import {
   VStack,
   useToast,
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom'; // Assumindo que você usa react-router
+import { useNavigate } from 'react-router-dom';
+import { login } from '../services/api'; // Ajuste o caminho para sua service
 
 interface LoginCredentials {
   email: string;
@@ -42,23 +42,9 @@ const Signin: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Chamada ao backend - substitua pela sua URL de API
-      const response = await fetch('/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
+      const response = await login(credentials);
+      const { token } = response.data;
 
-      if (!response.ok) {
-        throw new Error('Credenciais inválidas');
-      }
-
-      const data = await response.json();
-      const { token } = data;
-
-      // Armazenar o token JWT (exemplo usando localStorage)
       localStorage.setItem('jwt_token', token);
 
       toast({
@@ -68,12 +54,11 @@ const Signin: React.FC = () => {
         isClosable: true,
       });
 
-      // Redirecionar para a página principal
       navigate('/dashboard');
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: 'Erro no login',
-        description: error instanceof Error ? error.message : 'Erro desconhecido',
+        description: error.response?.data?.error || 'Erro desconhecido',
         status: 'error',
         duration: 3000,
         isClosable: true,

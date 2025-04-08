@@ -1,6 +1,6 @@
 // components/Header.tsx
 import React from 'react';
-import { Box, Text, IconButton, useDisclosure, border } from '@chakra-ui/react';
+import { Box, Text, IconButton, useDisclosure } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { Sidebar } from './Sidebar';
 
@@ -20,7 +20,7 @@ export function Header() {
           left="12px"
           top="16px"
           color={"yellow.400"}
-          size="" // Aumenta o botão (sm, md, lg)
+          size="" 
           onClick={onOpen}
         />
         <Text fontSize="3xl" color="yellow.400" fontWeight="bold">
