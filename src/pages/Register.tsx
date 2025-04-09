@@ -1,4 +1,3 @@
-// Register.tsx
 import React, { FormEvent, useState } from 'react';
 import {
   Box,
@@ -13,6 +12,8 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import fotolago from '../assets/fotolago.jpg';
+import { register } from '../services/api'; // Importe o método register
 
 interface RegisterCredentials {
   name: string;
@@ -44,7 +45,6 @@ const Register: React.FC = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Validação simples das senhas
     if (credentials.password !== credentials.confirmPassword) {
       toast({
         title: 'Erro',
@@ -58,37 +58,26 @@ const Register: React.FC = () => {
     }
 
     try {
-      // Chamada ao backend - substitua pela sua URL de API
-      const response = await fetch('/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: credentials.name,
-          email: credentials.email,
-          password: credentials.password,
-        }),
+      const response = await register({
+        name: credentials.name,
+        email: credentials.email,
+        password: credentials.password,
       });
-
-      if (!response.ok) {
-        throw new Error('Erro ao cadastrar');
-      }
 
       toast({
         title: 'Cadastro bem-sucedido',
-        description: 'Você pode fazer login agora',
+        description: `Bem-vindo, ${response.data.name}! Você pode fazer login agora.`,
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
 
-      // Redirecionar para a página de login
-      navigate('/');
-    } catch (error) {
+      navigate('/signin');
+    } catch (error: any) {
       toast({
         title: 'Erro no cadastro',
-        description: error instanceof Error ? error.message : 'Erro desconhecido',
+        description:
+          error.response?.data?.message || 'Erro ao cadastrar. Tente novamente.',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -105,11 +94,15 @@ const Register: React.FC = () => {
   return (
     <ChakraProvider>
       <Box
-        minH="100vh"
+        h="85vh"
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bg="gray.50"
+        bgImage={`url(${fotolago})`}
+        bgSize="cover"
+        bgPosition="center"
+        bgColor="rgba(0, 0, 0, 0.7)"
+        bgBlendMode="overlay"
       >
         <Box
           bg="#1c1c1c"

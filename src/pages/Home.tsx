@@ -4,26 +4,24 @@ import {
   Box,
   Text,
   VStack,
-  Button,
   Image,
   Flex,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import { NavLink } from 'react-router-dom';
 import raiz from '../assets/raiz.png';
 
 
 export function Home() {
   const textSize = useBreakpointValue({ base: 'md', md: 'lg', lg: 'xl' });
-  const buttonSize = useBreakpointValue({ base: 'md', md: 'lg' });
 
   return (
     <Box
-      h="calc(100vh - 129px)"
-      w="100vw"
+      
+      w={"100%"}
+      h={"85vh"}
       m={0}
       p={0}
-      bg="gray.900"
+      bg="gray.800"
       color="white"
       position="relative"
       overflow="hidden"
@@ -74,20 +72,20 @@ export function Home() {
             h={{ base: '200px', md: '300px' }}
           />
         </Flex>
-        <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
+        {/* <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
           <Button
             as={NavLink}
-            to="/alunos/novo"
+            to="/signin"
             size={buttonSize}
             colorScheme="yellow"
             variant="solid"
             fontWeight="bold"
             _hover={{ transform: 'scale(1.05)', transition: '0.2s' }}
           >
-            Faça Parte do Time
+            Clique para entrar!
           </Button>
           
-        </Flex>
+        </Flex> */}
         <Text fontSize="18px" color="gray.200" mt={4}>
           Treinos incríveis, competições emocionantes e uma vibe única à beira do lago.
         </Text>

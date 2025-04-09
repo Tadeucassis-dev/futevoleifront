@@ -25,9 +25,17 @@ export function AppRoutes() {
               {/* Rotas públicas */}
               <Route path="/signin" element={<Signin />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/" element={<Home />} />
+              
 
               {/* Rotas protegidas */}
+              <Route
+                path="/*"
+                element={
+                  <ProtectedRoute isAuthenticated={isAuthenticated}>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/alunos"
                 element={

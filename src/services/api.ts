@@ -9,17 +9,23 @@ const api = axios.create({
 });
 
 // Interceptor para adicionar o token em todas as requisições
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('jwt_token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-}, (error) => Promise.reject(error));
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('jwt_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 // Métodos de autenticação
 export const login = (credentials: { email: string; password: string }) =>
   api.post<{ token: string }>('/login', credentials);
+
+export const register = (user: { name: string; email: string; password: string }) =>
+  api.post<{ id: number; name: string; email: string }>('/register', user);
 
 // Métodos existentes
 export const getAlunos = () => api.get<Aluno[]>('/alunos');

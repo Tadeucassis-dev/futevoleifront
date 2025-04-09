@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/api'; // Ajuste o caminho para sua service
+import fotolago from '../assets/fotolago.jpg';
 
 interface LoginCredentials {
   email: string;
@@ -40,21 +41,21 @@ const Signin: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
+  
     try {
       const response = await login(credentials);
-      const { token } = response.data;
-
+      const { token } = response.data; // O backend retorna { "token": "jwt_aqui" }
+  
       localStorage.setItem('jwt_token', token);
-
+  
       toast({
         title: 'Login bem-sucedido',
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
-
-      navigate('/dashboard');
+  
+      navigate('/*');
     } catch (error: any) {
       toast({
         title: 'Erro no login',
@@ -75,19 +76,23 @@ const Signin: React.FC = () => {
   return (
     <ChakraProvider>
       <Box
-        minH="100vh"
+        h="85vh" // Altura exata da viewport
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bg="gray.50"
+        bgImage={`url(${fotolago})`}
+        bgSize="cover"
+        bgPosition="center"
+        bgColor="rgba(0, 0, 0, 0.7)" // Cor de fundo com opacidade
+        bgBlendMode="overlay"
       >
         <Box
-          bg="#1c1c1c"
-          p={8}
-          borderRadius="md"
-          boxShadow="md"
-          w="full"
-          maxW="md"
+           bg="#1c1c1c"
+           p={8}
+           borderRadius="md"
+           boxShadow="md"
+           w="full"
+           maxW="md"
         >
           <VStack spacing={6}>
             <Heading color="yellow.400">Bem-vindo</Heading>
