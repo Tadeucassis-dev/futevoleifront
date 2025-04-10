@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import {
   Box,
   Text,
@@ -7,45 +6,47 @@ import {
   Image,
   Flex,
   useBreakpointValue,
-} from '@chakra-ui/react';
-import raiz from '../assets/raiz.png';
-
+} from "@chakra-ui/react";
+import raiz from "../assets/raiz.png";
 
 export function Home() {
-  const textSize = useBreakpointValue({ base: 'md', md: 'lg', lg: 'xl' });
+  const textSize = useBreakpointValue({ base: "md", md: "lg", lg: "xl" });
 
   return (
     <Box
-      
-      w={"100%"}
-      h={"85vh"}
-      m={0}
-      p={0}
-      bg="gray.800"
-      color="white"
+      h="calc(100vh - 68px - 53px)" // Altura total menos Header e Footer
+      w="100%"
+      bgImage={`url(${raiz})`}
+      bgSize="cover"
+      bgPosition="center"
+      bgColor="rgba(0, 0, 0, 0.7)"
+      bgBlendMode="overlay"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
       position="relative"
-      overflow="hidden"
+      zIndex="1"
+      mt="68px" // Espaço para o Header fixo
+      _before={{
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        bg: "rgba(0, 0, 0, 0.7)",
+        zIndex: -1,
+      }}
     >
-      <Box
-        position="absolute"
-        top="0"
-        left="0"
-        right="0"
-        bottom="0"
-        bgSize="cover"
-        bgPosition="center"
-        opacity={0.3}
-        zIndex="1"
-      />
       <VStack
-        spacing={6}
+        spacing={4}
         textAlign="center"
         position="relative"
         zIndex="2"
-        py={{ base: 8, md: 12 }}
+        py={{ base: 4, md: 6 }}
         px={4}
         justify="center"
-        h="100%"
+        maxH="100%"
         w="100%"
       >
         <Text
@@ -59,34 +60,20 @@ export function Home() {
         <Flex
           justify="center"
           w="100%"
-          maxW={{ base: '90%', md: '600px' }}
+          maxW={{ base: "90%", md: "600px" }}
           mb={4}
         >
           <Image
-            src={raiz} 
+            src={raiz}
             alt="Jogadores de futevôlei na praia"
             borderRadius="md"
             boxShadow="lg"
             objectFit="cover"
             w="100%"
-            h={{ base: '200px', md: '300px' }}
+            h={{ base: "150px", md: "200px" }} // Ajustado para caber
           />
         </Flex>
-        {/* <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
-          <Button
-            as={NavLink}
-            to="/signin"
-            size={buttonSize}
-            colorScheme="yellow"
-            variant="solid"
-            fontWeight="bold"
-            _hover={{ transform: 'scale(1.05)', transition: '0.2s' }}
-          >
-            Clique para entrar!
-          </Button>
-          
-        </Flex> */}
-        <Text fontSize="18px" color="gray.200" mt={4}>
+        <Text fontSize="18px" color="gray.200" mt={2}>
           Treinos incríveis, competições emocionantes e uma vibe única à beira do lago.
         </Text>
       </VStack>

@@ -94,7 +94,7 @@ const Register: React.FC = () => {
   return (
     <ChakraProvider>
       <Box
-        h="85vh"
+        h="calc(100vh - 68px - 53px)" 
         display="flex"
         alignItems="center"
         justifyContent="center"

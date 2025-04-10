@@ -56,16 +56,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             >
               Novo Aluno
             </Button>
-            <Button
-              as={NavLink}
-              to="/checkins"
-              justifyContent="flex-start"
-              _activeLink={{ bg: "yellow.400" }}
-              _hover={{ bg: "yellow.300" }}
-              onClick={onClose}
-            >
-              Check-ins
-            </Button>
           </VStack> 
         </DrawerBody>
       </DrawerContent>

@@ -1,16 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ChakraProvider, Box } from "@chakra-ui/react";
-import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { Home } from "../pages/Home";
 import AlunoList from "../pages/AlunoList";
 import AlunoForm from "../pages/AlunoForm";
-import CheckinList from "../pages/CheckinList";
 import Signin from "../pages/Signin";
 import Register from "../pages/Register";
 import theme from "../theme";
 import { ProtectedRoute } from "../components/ProtectedRoute";
+import { Layout } from "../components/Layout";
 
 export function AppRoutes() {
   const isAuthenticated = !!localStorage.getItem("jwt_token"); // Verifica se o token está armazenado
@@ -18,8 +17,9 @@ export function AppRoutes() {
   return (
     <ChakraProvider theme={theme}>
       <Router>
+        <Layout>
         <Box minH="100vh" display="flex" flexDirection="column" m={0} p={0}>
-          <Header />
+          
           <Box as="main" flex="1" m={0} p={0}>
             <Routes>
               {/* Rotas públicas */}
@@ -52,18 +52,11 @@ export function AppRoutes() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/checkins"
-                element={
-                  <ProtectedRoute isAuthenticated={isAuthenticated}>
-                    <CheckinList alunoId={1} />
-                  </ProtectedRoute>
-                }
-              />
             </Routes>
           </Box>
           <Footer />
         </Box>
+        </Layout>
       </Router>
     </ChakraProvider>
   );

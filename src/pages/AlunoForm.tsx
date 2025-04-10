@@ -34,9 +34,14 @@ const AlunoForm: React.FC = () => {
   };
 
   return (
-    <Box p={4} maxW="400px" mx="auto">
+    <Box p={4} maxW="400px" mx="auto" h="calc(100vh - 68px - 53px)" alignContent={"center"}  justifyContent={"center"}>
+      
       <form onSubmit={handleSubmit}>
         <VStack >
+        
+          <FormControl>
+            <FormLabel textAlign="center" fontSize="2xl" >Cadastro de Aluno</FormLabel>
+          </FormControl>
           <FormControl>
             <FormLabel>Nome</FormLabel>
             <Input name="nome" value={aluno.nome} onChange={handleChange} required />
@@ -60,7 +65,11 @@ const AlunoForm: React.FC = () => {
           <Button type="submit" colorScheme="teal">Criar Aluno</Button>
         </VStack>
       </form>
+      <Box mb={4} textAlign="center" mt={6} >
+        <Button colorScheme="blue" onClick={() => window.history.back()}>Voltar</Button>
+      </Box>
     </Box>
+    
   );
 };
 
