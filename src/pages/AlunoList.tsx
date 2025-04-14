@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import {
   Box,
   Heading,
-  ListItem,
   Text,
   Spinner,
-  VStack,
-  List,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
   Button,
   Modal,
   ModalOverlay,
@@ -21,15 +24,18 @@ import {
   Switch,
   useDisclosure,
   useToast,
+  HStack,
 } from '@chakra-ui/react';
+import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { Aluno } from '../types';
 import { getAlunos, createAluno, updateAluno, deleteAluno } from '../services/api';
 
-// Interface para o formulário (opcional, para tipagem)
 interface AlunoFormData {
   id?: number;
   nome: string;
   email: string;
+  telefone: string;
+  dataNascimento: string;
   ativo: boolean;
 }
 
@@ -39,13 +45,14 @@ const AlunoList: React.FC = () => {
   const [formData, setFormData] = useState<AlunoFormData>({
     nome: '',
     email: '',
+    telefone: '',
+    dataNascimento: '',
     ativo: true,
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isEditing, setIsEditing] = useState(false);
   const toast = useToast();
 
-  // Buscar alunos ao carregar a página
   useEffect(() => {
     const fetchAlunos = async () => {
       try {
@@ -65,23 +72,21 @@ const AlunoList: React.FC = () => {
       }
     };
     fetchAlunos();
-  }, []);
+  }, [toast]);
 
-  // Função para abrir o modal de criação
-  const handleOpenCreate = () => {
-    setFormData({ nome: '', email: '', ativo: true });
-    setIsEditing(false);
-    onOpen();
-  };
-
-  // Função para abrir o modal de edição
   const handleOpenEdit = (aluno: Aluno) => {
-    setFormData({ id: aluno.id, nome: aluno.nome, email: aluno.email, ativo: aluno.ativo });
+    setFormData({
+      id: aluno.id,
+      nome: aluno.nome,
+      email: aluno.email,
+      telefone: aluno.telefone,
+      dataNascimento: aluno.dataNascimento,
+      ativo: aluno.ativo,
+    });
     setIsEditing(true);
     onOpen();
   };
 
-  // Função para lidar com mudanças no formulário
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -91,11 +96,9 @@ const AlunoList: React.FC = () => {
     setFormData((prev) => ({ ...prev, ativo: e.target.checked }));
   };
 
-  // Função para criar ou atualizar aluno
   const handleSubmit = async () => {
     try {
       if (isEditing && formData.id) {
-        // Atualizar aluno
         const response = await updateAluno(formData.id, formData);
         setAlunos((prev) =>
           prev.map((aluno) => (aluno.id === formData.id ? response.data : aluno))
@@ -108,7 +111,6 @@ const AlunoList: React.FC = () => {
           isClosable: true,
         });
       } else {
-        // Criar novo aluno
         const response = await createAluno(formData);
         setAlunos((prev) => [...prev, response.data]);
         toast({
@@ -132,7 +134,6 @@ const AlunoList: React.FC = () => {
     }
   };
 
-  // Função para deletar aluno
   const handleDelete = async (id: number) => {
     if (window.confirm('Tem certeza que deseja excluir este aluno?')) {
       try {
@@ -158,69 +159,118 @@ const AlunoList: React.FC = () => {
     }
   };
 
+  const handleToggleActive = async (aluno: Aluno) => {
+    try {
+      const updatedAluno = { ...aluno, ativo: !aluno.ativo };
+      const response = await updateAluno(aluno.id, updatedAluno);
+      setAlunos((prev) =>
+        prev.map((a) => (a.id === aluno.id ? response.data : a))
+      );
+      toast({
+        title: 'Sucesso',
+        description: `Aluno ${updatedAluno.ativo ? 'ativado' : 'desativado'} com sucesso!`,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error('Erro ao atualizar status:', error);
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível atualizar o status do aluno.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   if (loading) return <Spinner size="xl" />;
 
   return (
     <Box
-      p={4}
-      maxW="600px"
+      p={[4, 6]}
+      w={['90%', '80%', '1100px']}
+      maxW="1200px"
       mx="auto"
-      bg="white"
-      borderRadius="md"
-      boxShadow="md"
-      mt={20}
-      mb={20}
-      border="1px solid #ccc"
-      borderColor="gray.200"
-      bgColor="gray.50"
+      mt={['56px', '68px']} // Alinha com o header
+      minH="100vh"
+      py={[8, 12]}
+      position="relative"
     >
-      <Heading as="h2" size="lg" mb={4} textAlign="center">
+      <Heading as="h2" size="lg" mb={10} textAlign="center" p={4} borderRadius="md">
         Lista de Alunos
       </Heading>
-      <Button colorScheme="yellow" mb={4} onClick={handleOpenCreate}>
-        Adicionar Aluno
-      </Button>
-      <List spacing={3} styleType="disc">
-        {alunos.map((aluno) => (
-          <ListItem
-            key={aluno.id}
-            p={3}
-            borderWidth="1px"
-            borderRadius="md"
-            boxShadow="sm"
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <VStack align="start">
-              <Text fontWeight="bold">{aluno.nome}</Text>
-              <Text>{aluno.email}</Text>
-              <Text color={aluno.ativo ? 'green.500' : 'red.500'}>
-                {aluno.ativo ? 'Ativo' : 'Inativo'}
-              </Text>
-            </VStack>
-            <Box>
-              <Button
-                size="sm"
-                colorScheme="blue"
-                mr={2}
-                onClick={() => handleOpenEdit(aluno)}
-              >
-                Editar
-              </Button>
-              <Button
-                size="sm"
-                colorScheme="red"
-                onClick={() => handleDelete(aluno.id)}
-              >
-                Excluir
-              </Button>
-            </Box>
-          </ListItem>
-        ))}
-      </List>
 
-      {/* Modal para criar/editar */}
+      <Box
+        bg="gray.700"
+        borderRadius="md"
+        boxShadow="md"
+        border="1px solid"
+        borderColor="gray.200"
+        overflowX="auto"
+      >
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th color={'#fff'}>Nome</Th>
+              <Th color={'#fff'}>Email</Th>
+              <Th color={'#fff'}>Telefone</Th>
+              <Th color={'#fff'}>Data de Nascimento</Th>
+              <Th color={'#fff'}>Status</Th>
+              <Th color={'#fff'} textAlign="center">
+                Ações
+              </Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {alunos.map((aluno) => (
+              <Tr
+                key={aluno.id}
+                bg={aluno.id % 2 === 0 ? 'gray.600' : 'gray.700'} // Intercala cores
+                _hover={{ bg: 'gray.500' }} // Efeito hover para destaque
+              >
+                <Td color={'#fff'}>{aluno.nome}</Td>
+                <Td color={'#fff'}>{aluno.email}</Td>
+                <Td color={'#fff'}>{aluno.telefone}</Td>
+                <Td color={'#fff'}>{aluno.dataNascimento}</Td>
+                <Td>
+                  <Text color={aluno.ativo ? 'green.500' : 'red.500'}>
+                    {aluno.ativo ? 'Ativo' : 'Inativo'}
+                  </Text>
+                </Td>
+                <Td textAlign="right">
+                  <HStack spacing={2} justifyContent="flex-end">
+                    <Button
+                      size="sm"
+                      colorScheme="blue"
+                      onClick={() => handleOpenEdit(aluno)}
+                      leftIcon={<EditIcon />}
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      size="sm"
+                      colorScheme="red"
+                      onClick={() => handleDelete(aluno.id)}
+                      leftIcon={<DeleteIcon />}
+                    >
+                      Excluir
+                    </Button>
+                    <Switch
+                      isChecked={aluno.ativo}
+                      onChange={() => handleToggleActive(aluno)}
+                      colorScheme={aluno.ativo ? 'green' : 'red'}
+                      size="lg"
+                    />
+                  </HStack>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -244,6 +294,25 @@ const AlunoList: React.FC = () => {
                 onChange={handleInputChange}
                 placeholder="Digite o email"
                 type="email"
+              />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Telefone</FormLabel>
+              <Input
+                name="telefone"
+                value={formData.telefone}
+                onChange={handleInputChange}
+                placeholder="Digite o telefone"
+              />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Data de Nascimento</FormLabel>
+              <Input
+                name="dataNascimento"
+                value={formData.dataNascimento}
+                onChange={handleInputChange}
+                placeholder="Digite a data de nascimento"
+                type="date"
               />
             </FormControl>
             <FormControl display="flex" alignItems="center">
