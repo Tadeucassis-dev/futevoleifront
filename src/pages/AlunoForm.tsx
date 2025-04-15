@@ -40,25 +40,25 @@ const AlunoForm: React.FC = () => {
   w={['90%', '80%', '400px']}
   maxW="400px"
   mx="auto"
-  minH="100vh"
   py={[8, 12]}
   mt={['56px', '68px']} // Alinha com a altura do header
-  bgColor="#4c4c4c"
   borderRadius="md"
   boxShadow="lg"
+  bgColor={'#fff'}
 >
-      <VStack spacing={[4, 6]} as="form" onSubmit={handleSubmit}>
-        <FormControl>
+      <VStack spacing={[4, 6]} as="form" onSubmit={handleSubmit} >
+        <FormControl >
           <FormLabel
             textAlign="center"
             fontSize={['xl', '2xl']} // xl em celulares, 2xl em telas maiores
             fontWeight="bold"
+            color="#000"
           >
             Cadastro de Aluno
           </FormLabel>
         </FormControl>
         <FormControl>
-          <FormLabel fontSize={['sm', 'md']}>Nome</FormLabel>
+          <FormLabel fontSize={['sm', 'md']} color="#000">Nome</FormLabel>
           <Input
             name="nome"
             value={aluno.nome}
@@ -66,10 +66,11 @@ const AlunoForm: React.FC = () => {
             required
             size={['sm', 'md']} // Menor em celulares
             borderRadius="md"
+            color="#000"
           />
         </FormControl>
         <FormControl>
-          <FormLabel fontSize={['sm', 'md']}>Email</FormLabel>
+          <FormLabel fontSize={['sm', 'md']} color="#000">Email</FormLabel>
           <Input
             name="email"
             type="email"
@@ -78,10 +79,11 @@ const AlunoForm: React.FC = () => {
             required
             size={['sm', 'md']}
             borderRadius="md"
+            color="#000"
           />
         </FormControl>
         <FormControl>
-          <FormLabel fontSize={['sm', 'md']}>Telefone</FormLabel>
+          <FormLabel fontSize={['sm', 'md']} color="#000">Telefone</FormLabel>
           <Input
             name="telefone"
             value={aluno.telefone}
@@ -89,10 +91,11 @@ const AlunoForm: React.FC = () => {
             required
             size={['sm', 'md']}
             borderRadius="md"
+            color="#000"
           />
         </FormControl>
         <FormControl>
-          <FormLabel fontSize={['sm', 'md']}>Data de Nascimento</FormLabel>
+          <FormLabel fontSize={['sm', 'md']} color="#000">Data de Nascimento</FormLabel>
           <Input
             name="dataNascimento"
             type="date"
@@ -101,16 +104,18 @@ const AlunoForm: React.FC = () => {
             required
             size={['sm', 'md']}
             borderRadius="md"
+            color="#000"
           />
         </FormControl>
         <FormControl display="flex" alignItems="center">
-          <FormLabel mb="0" fontSize={['sm', 'md']}>
+          <FormLabel mb="0" fontSize={['sm', 'md']} color="#000">
             Ativo
           </FormLabel>
           <Switch
             isChecked={aluno.ativo}
             onChange={handleToggle}
-            size={['md', 'lg']} // Menor em celulares
+            borderRadius="md"
+            colorScheme="green"
           />
         </FormControl>
         <Button
@@ -120,18 +125,21 @@ const AlunoForm: React.FC = () => {
           size={['md', 'lg']} // Menor em celulares
           borderRadius="md"
         >
-          Criar Aluno
+          Cadastrar
         </Button>
       </VStack>
       <Box textAlign="center" mt={[4, 6]} bgColor="transparent">
         <Button
-          bgColor="yellow.400"
-          colorScheme="yellow"
+          colorScheme="yellow.400"
+          bgColor={'yellow.400'}
+          _hover={{ bgColor: 'yellow.300' }}
+          color="#000"
           variant="outline"
           onClick={() => window.history.back()}
           size={['sm', 'md']} // Menor em celulares
           p={[2, 3]}
           borderRadius="md"
+          
         >
           <ArrowBackIcon boxSize={[4, 6]} /> {/* Menor em celulares */}
         </Button>

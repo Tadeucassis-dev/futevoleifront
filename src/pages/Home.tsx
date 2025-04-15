@@ -14,7 +14,7 @@ export function Home() {
 
   return (
     <Box
-      h="calc(100vh - 68px - 53px)" // Altura total menos Header e Footer
+      h="calc(100vh - 68px - 53px)" 
       w="100%"
       bgImage={`url(${raiz})`}
       bgSize="cover"
@@ -26,7 +26,7 @@ export function Home() {
       justifyContent="center"
       position="relative"
       zIndex="1"
-      mt="68px" // Espaço para o Header fixo
+      mt="68px" 
       _before={{
         content: '""',
         position: "absolute",
@@ -70,7 +70,7 @@ export function Home() {
             boxShadow="lg"
             objectFit="cover"
             w="100%"
-            h={{ base: "150px", md: "200px" }} // Ajustado para caber
+            h={{ base: "150px", md: "200px" }} 
           />
         </Flex>
         <Text fontSize="18px" color="gray.200" mt={2}>

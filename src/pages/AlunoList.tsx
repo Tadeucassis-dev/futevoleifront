@@ -190,8 +190,8 @@ const AlunoList: React.FC = () => {
   return (
     <Box
       p={[4, 6]}
-      w={['90%', '80%', '1100px']}
-      maxW="1200px"
+      w={['90%', '80%', '1400px']}
+      maxW="1400px"
       mx="auto"
       mt={['56px', '68px']} // Alinha com o header
       minH="100vh"
@@ -203,7 +203,7 @@ const AlunoList: React.FC = () => {
       </Heading>
 
       <Box
-        bg="gray.700"
+        bg="yellow.400"
         borderRadius="md"
         boxShadow="md"
         border="1px solid"
@@ -213,113 +213,120 @@ const AlunoList: React.FC = () => {
         <Table variant="simple">
           <Thead>
             <Tr>
-              <Th color={'#fff'}>Nome</Th>
-              <Th color={'#fff'}>Email</Th>
-              <Th color={'#fff'}>Telefone</Th>
-              <Th color={'#fff'}>Data de Nascimento</Th>
-              <Th color={'#fff'}>Status</Th>
-              <Th color={'#fff'} textAlign="center">
+              <Th color={'#000'}>Nome</Th>
+              <Th color={'#000'}>Email</Th>
+              <Th color={'#000'}>Telefone</Th>
+              <Th color={'#000'}>Nascimento</Th>
+              <Th color={'#000'}>Status</Th>
+              <Th color={'#000'} textAlign="center">
                 Ações
               </Th>
             </Tr>
           </Thead>
           <Tbody>
-            {alunos.map((aluno) => (
-              <Tr
-                key={aluno.id}
-                bg={aluno.id % 2 === 0 ? 'gray.600' : 'gray.700'} // Intercala cores
-                _hover={{ bg: 'gray.500' }} // Efeito hover para destaque
-              >
-                <Td color={'#fff'}>{aluno.nome}</Td>
-                <Td color={'#fff'}>{aluno.email}</Td>
-                <Td color={'#fff'}>{aluno.telefone}</Td>
-                <Td color={'#fff'}>{aluno.dataNascimento}</Td>
-                <Td>
-                  <Text color={aluno.ativo ? 'green.500' : 'red.500'}>
-                    {aluno.ativo ? 'Ativo' : 'Inativo'}
-                  </Text>
-                </Td>
-                <Td textAlign="right">
-                  <HStack spacing={2} justifyContent="flex-end">
-                    <Button
-                      size="sm"
-                      colorScheme="blue"
-                      onClick={() => handleOpenEdit(aluno)}
-                      leftIcon={<EditIcon />}
-                    >
-                      Editar
-                    </Button>
-                    <Button
-                      size="sm"
-                      colorScheme="red"
-                      onClick={() => handleDelete(aluno.id)}
-                      leftIcon={<DeleteIcon />}
-                    >
-                      Excluir
-                    </Button>
-                    <Switch
-                      isChecked={aluno.ativo}
-                      onChange={() => handleToggleActive(aluno)}
-                      colorScheme={aluno.ativo ? 'green' : 'red'}
-                      size="lg"
-                    />
-                  </HStack>
-                </Td>
-              </Tr>
-            ))}
+            
+              {alunos.map((aluno, index) => (
+                <Tr
+                  key={aluno.id}
+                  bg={index % 2 === 0 ? 'gray.900' : 'gray.700'} 
+                  _hover={{ bg: 'gray.800' }}
+                >
+                  <Td color="#fff">{aluno.nome}</Td>
+                  <Td color="#fff">{aluno.email}</Td>
+                  <Td color="#fff">{aluno.telefone}</Td>
+                  <Td color="#fff">{aluno.dataNascimento}</Td>
+                  <Td>
+                    <Text color={aluno.ativo ? 'green.500' : 'red.500'}>
+                      {aluno.ativo ? 'Ativo' : 'Inativo'}
+                    </Text>
+                  </Td>
+                  <Td textAlign="right">
+                    <HStack spacing={2} justifyContent="flex-end">
+                      <Button
+                        size="sm"
+                        colorScheme="blue"
+                        onClick={() => handleOpenEdit(aluno)}
+                        leftIcon={<EditIcon />}
+                      >
+                        Editar
+                      </Button>
+                      <Button
+                        size="sm"
+                        colorScheme="red"
+                        onClick={() => handleDelete(aluno.id)}
+                        leftIcon={<DeleteIcon />}
+                      >
+                        Excluir
+                      </Button>
+                      <Switch
+                        isChecked={aluno.ativo}
+                        onChange={() => handleToggleActive(aluno)}
+                        colorScheme={aluno.ativo ? 'green' : 'red'}
+                        size="lg"
+                      />
+                    </HStack>
+                  </Td>
+                </Tr>
+              ))}
           </Tbody>
         </Table>
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{isEditing ? 'Editar Aluno' : 'Adicionar Aluno'}</ModalHeader>
+          <ModalHeader color={'#000'}>{isEditing ? 'Editar Aluno' : 'Adicionar Aluno'}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <FormControl mb={4}>
-              <FormLabel>Nome</FormLabel>
+              <FormLabel color={'#000'}>Nome</FormLabel>
               <Input
                 name="nome"
                 value={formData.nome}
                 onChange={handleInputChange}
                 placeholder="Digite o nome"
+                type="text"
+                color={'#000'}
               />
             </FormControl>
             <FormControl mb={4}>
-              <FormLabel>Email</FormLabel>
+              <FormLabel color={'#000'}>Email</FormLabel>
               <Input
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="Digite o email"
                 type="email"
+                color={'#000'}
               />
             </FormControl>
             <FormControl mb={4}>
-              <FormLabel>Telefone</FormLabel>
+              <FormLabel color={'#000'}>Telefone</FormLabel>
               <Input
                 name="telefone"
                 value={formData.telefone}
                 onChange={handleInputChange}
                 placeholder="Digite o telefone"
+                color={'#000'}
               />
             </FormControl>
             <FormControl mb={4}>
-              <FormLabel>Data de Nascimento</FormLabel>
+              <FormLabel color={'#000'}>Data de Nascimento</FormLabel>
               <Input
                 name="dataNascimento"
                 value={formData.dataNascimento}
                 onChange={handleInputChange}
                 placeholder="Digite a data de nascimento"
                 type="date"
+                color={'#000'}
               />
             </FormControl>
             <FormControl display="flex" alignItems="center">
-              <FormLabel mb="0">Ativo</FormLabel>
+              <FormLabel mb="0" color={'#000'}>Ativo</FormLabel>
               <Switch
                 isChecked={formData.ativo}
                 onChange={handleSwitchChange}
+                colorScheme="green"
               />
             </FormControl>
           </ModalBody>
