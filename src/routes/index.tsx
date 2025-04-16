@@ -10,6 +10,7 @@ import Register from "../pages/Register";
 import theme from "../theme";
 import { ProtectedRoute } from "../components/ProtectedRoute";
 import { Layout } from "../components/Layout";
+import Notifications from "../pages/Notifications";
 
 export function AppRoutes() {
   const isAuthenticated = !!localStorage.getItem("jwt_token"); // Verifica se o token está armazenado
@@ -44,6 +45,14 @@ export function AppRoutes() {
                   </ProtectedRoute>
                 }
               />
+               <Route
+                path="/notificacoes"
+                element={
+                  <ProtectedRoute isAuthenticated={isAuthenticated}>
+                    <Notifications />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/alunos/novo"
                 element={
@@ -52,6 +61,7 @@ export function AppRoutes() {
                   </ProtectedRoute>
                 }
               />
+
             </Routes>
           </Box>
           <Footer />

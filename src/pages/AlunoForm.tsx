@@ -10,6 +10,7 @@ const AlunoForm: React.FC = () => {
     email: '',
     telefone: '',
     dataNascimento: '',
+    diaVencimentoMensalidade: 0,
     ativo: true,
   });
 
@@ -100,6 +101,19 @@ const AlunoForm: React.FC = () => {
             name="dataNascimento"
             type="date"
             value={aluno.dataNascimento}
+            onChange={handleChange}
+            required
+            size={['sm', 'md']}
+            borderRadius="md"
+            color="#000"
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel fontSize={['sm', 'md']} color="#000">Dia de Vencimento da Mensalidade</FormLabel>
+          <Input
+            name="diaVencimentoMensalidade"
+            type="number"
+            value={aluno.diaVencimentoMensalidade}
             onChange={handleChange}
             required
             size={['sm', 'md']}

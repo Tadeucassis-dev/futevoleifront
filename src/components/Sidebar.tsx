@@ -46,7 +46,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             >
               Lista de Alunos
             </Button>
-            <Button
+            {/* <Button
               as={NavLink}
               to="/alunos/novo"
               justifyContent="flex-start"
@@ -55,6 +55,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               onClick={onClose}
             >
               Novo Aluno
+            </Button> */}
+            <Button
+              as={NavLink}
+              to="/notificacoes"
+              justifyContent="flex-start"
+              _activeLink={{ bg: "yellow.400" }}
+              _hover={{ bg: "yellow.300" }}
+              onClick={onClose}
+            >
+              Notificações
             </Button>
           </VStack> 
         </DrawerBody>

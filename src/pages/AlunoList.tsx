@@ -36,6 +36,7 @@ interface AlunoFormData {
   email: string;
   telefone: string;
   dataNascimento: string;
+  diaVencimentoMensalidade?: number | null;
   ativo: boolean;
 }
 
@@ -47,6 +48,7 @@ const AlunoList: React.FC = () => {
     email: '',
     telefone: '',
     dataNascimento: '',
+    diaVencimentoMensalidade: null,
     ativo: true,
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -57,7 +59,7 @@ const AlunoList: React.FC = () => {
     const fetchAlunos = async () => {
       try {
         const response = await getAlunos();
-        setAlunos(response.data);
+        setAlunos(response);
       } catch (error) {
         console.error('Erro ao buscar alunos:', error);
         toast({
@@ -81,15 +83,32 @@ const AlunoList: React.FC = () => {
       email: aluno.email,
       telefone: aluno.telefone,
       dataNascimento: aluno.dataNascimento,
+      diaVencimentoMensalidade: aluno.diaVencimentoMensalidade ?? null,
       ativo: aluno.ativo,
     });
     setIsEditing(true);
     onOpen();
   };
 
+  const handleOpenCreate = () => {
+    setFormData({
+      nome: '',
+      email: '',
+      telefone: '',
+      dataNascimento: '',
+      diaVencimentoMensalidade: null,
+      ativo: true,
+    });
+    setIsEditing(false);
+    onOpen();
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === 'diaVencimentoMensalidade' ? (value ? Number(value) : null) : value,
+    }));
   };
 
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +118,10 @@ const AlunoList: React.FC = () => {
   const handleSubmit = async () => {
     try {
       if (isEditing && formData.id) {
-        const response = await updateAluno(formData.id, formData);
+        const response = await updateAluno(formData.id, {
+          ...formData,
+          diaVencimentoMensalidade: formData.diaVencimentoMensalidade ?? undefined,
+        });
         setAlunos((prev) =>
           prev.map((aluno) => (aluno.id === formData.id ? response.data : aluno))
         );
@@ -111,7 +133,10 @@ const AlunoList: React.FC = () => {
           isClosable: true,
         });
       } else {
-        const response = await createAluno(formData);
+        const response = await createAluno({
+          ...formData,
+          diaVencimentoMensalidade: formData.diaVencimentoMensalidade ?? undefined,
+        });
         setAlunos((prev) => [...prev, response.data]);
         toast({
           title: 'Sucesso',
@@ -201,7 +226,9 @@ const AlunoList: React.FC = () => {
       <Heading as="h2" size="lg" mb={10} textAlign="center" p={4} borderRadius="md">
         Lista de Alunos
       </Heading>
-
+      <Button colorScheme="yellow" mb={4} onClick={handleOpenCreate}>
+        Adicionar Aluno
+      </Button>
       <Box
         bg="yellow.400"
         borderRadius="md"
@@ -217,6 +244,7 @@ const AlunoList: React.FC = () => {
               <Th color={'#000'}>Email</Th>
               <Th color={'#000'}>Telefone</Th>
               <Th color={'#000'}>Nascimento</Th>
+              <Th color={'#000'}>Vencimento</Th>
               <Th color={'#000'}>Status</Th>
               <Th color={'#000'} textAlign="center">
                 Ações
@@ -224,55 +252,55 @@ const AlunoList: React.FC = () => {
             </Tr>
           </Thead>
           <Tbody>
-            
-              {alunos.map((aluno, index) => (
-                <Tr
-                  key={aluno.id}
-                  bg={index % 2 === 0 ? 'gray.900' : 'gray.700'} 
-                  _hover={{ bg: 'gray.800' }}
-                >
-                  <Td color="#fff">{aluno.nome}</Td>
-                  <Td color="#fff">{aluno.email}</Td>
-                  <Td color="#fff">{aluno.telefone}</Td>
-                  <Td color="#fff">{aluno.dataNascimento}</Td>
-                  <Td>
-                    <Text color={aluno.ativo ? 'green.500' : 'red.500'}>
-                      {aluno.ativo ? 'Ativo' : 'Inativo'}
-                    </Text>
-                  </Td>
-                  <Td textAlign="right">
-                    <HStack spacing={2} justifyContent="flex-end">
-                      <Button
-                        size="sm"
-                        colorScheme="blue"
-                        onClick={() => handleOpenEdit(aluno)}
-                        leftIcon={<EditIcon />}
-                      >
-                        Editar
-                      </Button>
-                      <Button
-                        size="sm"
-                        colorScheme="red"
-                        onClick={() => handleDelete(aluno.id)}
-                        leftIcon={<DeleteIcon />}
-                      >
-                        Excluir
-                      </Button>
-                      <Switch
-                        isChecked={aluno.ativo}
-                        onChange={() => handleToggleActive(aluno)}
-                        colorScheme={aluno.ativo ? 'green' : 'red'}
-                        size="lg"
-                      />
-                    </HStack>
-                  </Td>
-                </Tr>
-              ))}
+            {alunos.map((aluno, index) => (
+              <Tr
+                key={aluno.id}
+                bg={index % 2 === 0 ? 'gray.900' : 'gray.700'}
+                _hover={{ bg: 'gray.800' }}
+              >
+                <Td color="#fff">{aluno.nome}</Td>
+                <Td color="#fff">{aluno.email}</Td>
+                <Td color="#fff">{aluno.telefone}</Td>
+                <Td color="#fff">{aluno.dataNascimento}</Td>
+                <Td color="#fff">{aluno.diaVencimentoMensalidade ?? 'Não definido'}</Td>
+                <Td>
+                  <Text color={aluno.ativo ? 'green.500' : 'red.500'}>
+                    {aluno.ativo ? 'Ativo' : 'Inativo'}
+                  </Text>
+                </Td>
+                <Td textAlign="right">
+                  <HStack spacing={2} justifyContent="flex-end">
+                    <Button
+                      size="sm"
+                      colorScheme="blue"
+                      onClick={() => handleOpenEdit(aluno)}
+                      leftIcon={<EditIcon />}
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      size="sm"
+                      colorScheme="red"
+                      onClick={() => handleDelete(aluno.id)}
+                      leftIcon={<DeleteIcon />}
+                    >
+                      Excluir
+                    </Button>
+                    <Switch
+                      isChecked={aluno.ativo}
+                      onChange={() => handleToggleActive(aluno)}
+                      colorScheme={aluno.ativo ? 'green' : 'red'}
+                      size="lg"
+                    />
+                  </HStack>
+                </Td>
+              </Tr>
+            ))}
           </Tbody>
         </Table>
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose} >
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader color={'#000'}>{isEditing ? 'Editar Aluno' : 'Adicionar Aluno'}</ModalHeader>
@@ -318,6 +346,17 @@ const AlunoList: React.FC = () => {
                 onChange={handleInputChange}
                 placeholder="Digite a data de nascimento"
                 type="date"
+                color={'#000'}
+              />
+            </FormControl>
+            <FormControl mb={4}>
+              <FormLabel color={'#000'}>Dia de Vencimento</FormLabel>
+              <Input
+                name="diaVencimentoMensalidade"
+                value={formData.diaVencimentoMensalidade ?? ''}
+                onChange={handleInputChange}
+                placeholder="Digite o dia de vencimento (1-31)"
+                type="number"
                 color={'#000'}
               />
             </FormControl>

@@ -4,6 +4,7 @@ export interface Aluno {
     email: string;
     telefone: string;
     dataNascimento: string; // Pode mudar para Date se preferir
+    diaVencimentoMensalidade: number;
     ativo: boolean;
   }
   
@@ -18,5 +19,6 @@ export interface Aluno {
     idAluno: Aluno; // Relacionamento com Aluno
     valor: number;
     dataPagamento: string; // Pode mudar para Date se preferir
+    diaVencimentoMensalidade: number;
     pago: boolean;
   }
