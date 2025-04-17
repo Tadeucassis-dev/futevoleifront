@@ -58,17 +58,18 @@ const AlunoList: React.FC = () => {
   useEffect(() => {
     const fetchAlunos = async () => {
       try {
-        const response = await getAlunos();
-        setAlunos(response);
-      } catch (error) {
-        console.error('Erro ao buscar alunos:', error);
+        const response: Aluno[] = await getAlunos(); 
+        setAlunos(response); 
+      } catch (error: any) {
+        console.error('Erro ao carregar alunos:', error);
         toast({
           title: 'Erro',
-          description: 'Não foi possível carregar a lista de alunos.',
+          description: error.response?.data || 'Erro ao carregar alunos',
           status: 'error',
           duration: 3000,
           isClosable: true,
         });
+        setAlunos([]);
       } finally {
         setLoading(false);
       }
@@ -252,51 +253,61 @@ const AlunoList: React.FC = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {alunos.map((aluno, index) => (
-              <Tr
-                key={aluno.id}
-                bg={index % 2 === 0 ? 'gray.900' : 'gray.700'}
-                _hover={{ bg: 'gray.800' }}
+  {Array.isArray(alunos) && alunos.length > 0 ? (
+    alunos
+      .filter((aluno) => aluno && typeof aluno === 'object' && 'nome' in aluno) // Filtra itens válidos
+      .map((aluno, index) => (
+        <Tr
+          key={aluno.id || index} // Usa index como fallback caso aluno.id seja undefined
+          bg={index % 2 === 0 ? 'gray.900' : 'gray.700'}
+          _hover={{ bg: 'gray.800' }}
+        >
+          <Td color="#fff">{aluno.nome}</Td>
+          <Td color="#fff">{aluno.email}</Td>
+          <Td color="#fff">{aluno.telefone}</Td>
+          <Td color="#fff">{aluno.dataNascimento}</Td>
+          <Td color="#fff">{aluno.diaVencimentoMensalidade ?? 'Não definido'}</Td>
+          <Td>
+            <Text color={aluno.ativo ? 'green.500' : 'red.500'}>
+              {aluno.ativo ? 'Ativo' : 'Inativo'}
+            </Text>
+          </Td>
+          <Td textAlign="right">
+            <HStack spacing={2} justifyContent="flex-end">
+              <Button
+                size="sm"
+                colorScheme="blue"
+                onClick={() => handleOpenEdit(aluno)}
+                leftIcon={<EditIcon />}
               >
-                <Td color="#fff">{aluno.nome}</Td>
-                <Td color="#fff">{aluno.email}</Td>
-                <Td color="#fff">{aluno.telefone}</Td>
-                <Td color="#fff">{aluno.dataNascimento}</Td>
-                <Td color="#fff">{aluno.diaVencimentoMensalidade ?? 'Não definido'}</Td>
-                <Td>
-                  <Text color={aluno.ativo ? 'green.500' : 'red.500'}>
-                    {aluno.ativo ? 'Ativo' : 'Inativo'}
-                  </Text>
-                </Td>
-                <Td textAlign="right">
-                  <HStack spacing={2} justifyContent="flex-end">
-                    <Button
-                      size="sm"
-                      colorScheme="blue"
-                      onClick={() => handleOpenEdit(aluno)}
-                      leftIcon={<EditIcon />}
-                    >
-                      Editar
-                    </Button>
-                    <Button
-                      size="sm"
-                      colorScheme="red"
-                      onClick={() => handleDelete(aluno.id)}
-                      leftIcon={<DeleteIcon />}
-                    >
-                      Excluir
-                    </Button>
-                    <Switch
-                      isChecked={aluno.ativo}
-                      onChange={() => handleToggleActive(aluno)}
-                      colorScheme={aluno.ativo ? 'green' : 'red'}
-                      size="lg"
-                    />
-                  </HStack>
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
+                Editar
+              </Button>
+              <Button
+                size="sm"
+                colorScheme="red"
+                onClick={() => handleDelete(aluno.id)}
+                leftIcon={<DeleteIcon />}
+              >
+                Excluir
+              </Button>
+              <Switch
+                isChecked={aluno.ativo}
+                onChange={() => handleToggleActive(aluno)}
+                colorScheme={aluno.ativo ? 'green' : 'red'}
+                size="lg"
+              />
+            </HStack>
+          </Td>
+        </Tr>
+      ))
+  ) : (
+    <Tr>
+      <Td colSpan={7} textAlign="center" color="#fff">
+        Nenhum aluno encontrado
+      </Td>
+    </Tr>
+  )}
+</Tbody>
         </Table>
       </Box>
 

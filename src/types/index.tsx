@@ -1,12 +1,12 @@
 export interface Aluno {
-    id: number;
-    nome: string;
-    email: string;
-    telefone: string;
-    dataNascimento: string; // Pode mudar para Date se preferir
-    diaVencimentoMensalidade: number;
-    ativo: boolean;
-  }
+  id: number;
+  nome: string;
+  email: string;
+  telefone: string; // Deve ser armazenado como +5511999999999 ou (99)9 9999-9999
+  dataNascimento: string;
+  diaVencimentoMensalidade?: number | null;
+  ativo: boolean;
+}
   
   export interface Checkin {
     id: number;

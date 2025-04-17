@@ -113,7 +113,7 @@ const AlunoForm: React.FC = () => {
           <Input
             name="diaVencimentoMensalidade"
             type="number"
-            value={aluno.diaVencimentoMensalidade}
+            value={aluno.diaVencimentoMensalidade ?? ''}
             onChange={handleChange}
             required
             size={['sm', 'md']}

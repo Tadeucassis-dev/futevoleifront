@@ -33,17 +33,41 @@ export const getAlunos = async (): Promise<Aluno[]> => {
   return response.data;
 };
 
-export const createAluno = async (data: { nome: string; email: string; ativo: boolean; telefone?: string; dataNascimento?: string; diaVencimentoMensalidade?: number }) =>
-  api.post<Aluno>('/alunos', data);
+export const createAluno = async (aluno: {
+  nome: string;
+  email: string;
+  ativo: boolean;
+  telefone?: string;
+  dataNascimento?: string;
+  diaVencimentoMensalidade?: number | null; // Permite null
+}) => {
+  const response = await api.post('/alunos', aluno);
+  return response.data;
+};
 
-export const updateAluno = async (id: number, data: { nome: string; email: string; ativo: boolean; telefone?: string; dataNascimento?: string; diaVencimentoMensalidade?: number }) =>
-  api.put<Aluno>(`/alunos/${id}`, data);
+export const updateAluno = async (
+  id: number,
+  aluno: {
+    nome: string;
+    email: string;
+    ativo: boolean;
+    telefone?: string;
+    dataNascimento?: string;
+    diaVencimentoMensalidade?: number | null; // Permite null
+  }
+) => {
+  const response = await api.put(`/alunos/${id}`, aluno);
+  return response.data;
+};
 
 export const deleteAluno = async (id: number) => api.delete(`/alunos/${id}`);
 
 // Método de notificações
-export const sendManualNotification = async (idAluno: number, mensagem: string): Promise<string> =>
-  api.post(`/notificacoes/${idAluno}`, { mensagem });
+export const sendManualNotification = async (alunoId: number, mensagem: string) => {
+  const response = await api.post(`/notificacoes/${alunoId}`, { mensagem });
+  console.log('Resposta de sendManualNotification:', response);
+  return response.data;
+};
 
 // Métodos de check-ins
 export const getCheckinsByAluno = async (idAluno: number) => api.get<Checkin[]>(`/checkins/${idAluno}`);

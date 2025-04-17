@@ -59,11 +59,58 @@ const Notifications: React.FC = () => {
       });
       return;
     }
+  
+    const aluno = alunos.find((a) => a.id === alunoId);
+    console.log('Telefone do aluno:', aluno?.telefone);
+    if (!aluno?.telefone) {
+      toast({
+        title: 'Erro',
+        description: 'Telefone não definido para este aluno.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+  
+    // Normalizar o número de telefone
+    let formattedTelefone = aluno.telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
+    if (!formattedTelefone.startsWith('+55')) {
+      // Assume formato brasileiro (99)9 9999-9999 ou 11999999999
+      if (formattedTelefone.length === 11) {
+        formattedTelefone = `+55${formattedTelefone}`; // Adiciona +55
+      } else if (formattedTelefone.length === 10) {
+        // Caso tenha apenas 10 dígitos (sem o 9), adicione o 9
+        formattedTelefone = `+55${formattedTelefone.slice(0, 2)}9${formattedTelefone.slice(2)}`;
+      } else {
+        toast({
+          title: 'Erro',
+          description: 'Telefone inválido. Use o formato (99)9 9999-9999 ou +5511999999999.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+    }
+  
+    // Validar tamanho (13 dígitos para Brasil: +55DDD9NNNNNNNN)
+    if (!formattedTelefone.match(/^\+\d{12,13}$/)) {
+      toast({
+        title: 'Erro',
+        description: 'Telefone inválido. O número deve ter 12 ou 13 dígitos (ex.: +5511999999999).',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+  
     try {
       const response = await sendManualNotification(alunoId, mensagem);
       toast({
         title: 'Sucesso',
-        description: response,
+        description: response || 'Notificação enviada com sucesso!',
         status: 'success',
         duration: 3000,
         isClosable: true,
