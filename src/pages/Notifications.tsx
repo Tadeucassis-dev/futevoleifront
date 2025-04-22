@@ -19,7 +19,7 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { Aluno } from '../types';
-import { getAlunos, sendManualNotification } from '../services/api';
+import { getAlunos, sendManualNotification, sendNotificationToAll } from '../services/api';
 
 const Notifications: React.FC = () => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
@@ -36,7 +36,7 @@ const Notifications: React.FC = () => {
         console.error('Erro ao carregar alunos:', error);
         toast({
           title: 'Erro',
-          description: error.response?.data || 'Erro ao carregar alunos',
+          description: error.message || 'Erro ao carregar alunos',
           status: 'error',
           duration: 3000,
           isClosable: true,
@@ -59,7 +59,7 @@ const Notifications: React.FC = () => {
       });
       return;
     }
-  
+
     const aluno = alunos.find((a) => a.id === alunoId);
     console.log('Telefone do aluno:', aluno?.telefone);
     if (!aluno?.telefone) {
@@ -72,15 +72,12 @@ const Notifications: React.FC = () => {
       });
       return;
     }
-  
-    // Normalizar o número de telefone
-    let formattedTelefone = aluno.telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+    let formattedTelefone = aluno.telefone.replace(/\D/g, '');
     if (!formattedTelefone.startsWith('+55')) {
-      // Assume formato brasileiro (99)9 9999-9999 ou 11999999999
       if (formattedTelefone.length === 11) {
-        formattedTelefone = `+55${formattedTelefone}`; // Adiciona +55
+        formattedTelefone = `+55${formattedTelefone}`;
       } else if (formattedTelefone.length === 10) {
-        // Caso tenha apenas 10 dígitos (sem o 9), adicione o 9
         formattedTelefone = `+55${formattedTelefone.slice(0, 2)}9${formattedTelefone.slice(2)}`;
       } else {
         toast({
@@ -93,8 +90,7 @@ const Notifications: React.FC = () => {
         return;
       }
     }
-  
-    // Validar tamanho (13 dígitos para Brasil: +55DDD9NNNNNNNN)
+
     if (!formattedTelefone.match(/^\+\d{12,13}$/)) {
       toast({
         title: 'Erro',
@@ -105,7 +101,7 @@ const Notifications: React.FC = () => {
       });
       return;
     }
-  
+
     try {
       const response = await sendManualNotification(alunoId, mensagem);
       toast({
@@ -120,9 +116,43 @@ const Notifications: React.FC = () => {
       console.error('Erro ao enviar notificação:', error);
       toast({
         title: 'Erro',
-        description: error.response?.data || 'Erro ao enviar notificação',
+        description: error.message || 'Erro ao enviar notificação',
         status: 'error',
         duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleSendToAll = async () => {
+    if (!mensagem.trim()) {
+      toast({
+        title: 'Aviso',
+        description: 'Digite uma mensagem antes de enviar',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      const response = await sendNotificationToAll(mensagem);
+      toast({
+        title: 'Sucesso',
+        description: response || 'Notificações enviadas para todos os alunos!',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      setMensagem('');
+    } catch (error: any) {
+      console.error('Erro ao enviar notificação em massa:', error);
+      toast({
+        title: 'Erro',
+        description: error.message || 'Erro ao enviar notificação em massa',
+        status: 'error',
+        duration: 5000,
         isClosable: true,
       });
     }
@@ -152,7 +182,7 @@ const Notifications: React.FC = () => {
       color="white"
       borderRadius="md"
     >
-      <VStack spacing={6} align="stretch">
+      <VStack spacing={4} align="stretch">
         <Heading as="h2" size="lg" textAlign="center">
           Gerenciar Notificações
         </Heading>
@@ -162,8 +192,8 @@ const Notifications: React.FC = () => {
 
         <Box>
           <FormControl mb={4}>
-            <FormLabel color="white">Enviar Notificação Manual</FormLabel>
-            <HStack>
+            <FormLabel color="white">Enviar Notificação</FormLabel>
+            <HStack spacing={2}>
               <Input
                 value={mensagem}
                 onChange={(e) => setMensagem(e.target.value)}
@@ -174,6 +204,13 @@ const Notifications: React.FC = () => {
                 _hover={{ borderColor: 'yellow.400' }}
                 _focus={{ borderColor: 'yellow.400', boxShadow: '0 0 0 1px yellow.400' }}
               />
+              <Button
+                colorScheme="yellow"
+                onClick={handleSendToAll}
+                isDisabled={!mensagem}
+              >
+                Enviar para Todos
+              </Button>
               <Button
                 colorScheme="yellow"
                 variant="outline"
@@ -200,6 +237,7 @@ const Notifications: React.FC = () => {
                 <Th color="yellow.400">Nome</Th>
                 <Th color="yellow.400">Email</Th>
                 <Th color="yellow.400">Vencimento</Th>
+                <Th color="yellow.400">Ativo</Th>
                 <Th color="yellow.400" textAlign="center">
                   Ações
                 </Th>
@@ -215,6 +253,7 @@ const Notifications: React.FC = () => {
                   <Td>{aluno.nome}</Td>
                   <Td>{aluno.email}</Td>
                   <Td>{aluno.diaVencimentoMensalidade ?? 'Não definido'}</Td>
+                  <Td>{aluno.ativo ? 'Sim' : 'Não'}</Td>
                   <Td textAlign="center">
                     <Button
                       colorScheme="yellow"

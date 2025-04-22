@@ -11,63 +11,61 @@ import theme from "../theme";
 import { ProtectedRoute } from "../components/ProtectedRoute";
 import { Layout } from "../components/Layout";
 import Notifications from "../pages/Notifications";
+import { AuthProvider } from "../context/AuthContext";
 
 export function AppRoutes() {
-  const isAuthenticated = !!localStorage.getItem("jwt_token"); // Verifica se o token está armazenado
-
   return (
     <ChakraProvider theme={theme}>
-      <Router>
-        <Layout>
-        <Box minH="100vh" display="flex" flexDirection="column" m={0} p={0}>
-          
-          <Box as="main" flex="1" m={0} p={0}>
-            <Routes>
-              {/* Rotas públicas */}
-              <Route path="/signin" element={<Signin />} />
-              <Route path="/register" element={<Register />} />
-              
+      <AuthProvider>
+        <Router>
+          <Layout>
+            <Box minH="100vh" display="flex" flexDirection="column" m={0} p={0}>
+              <Box as="main" flex="1" m={0} p={0}>
+                <Routes>
+                  {/* Rotas públicas */}
+                  <Route path="/signin" element={<Signin />} />
+                  <Route path="/register" element={<Register />} />
 
-              {/* Rotas protegidas */}
-              <Route
-                path="/*"
-                element={
-                  <ProtectedRoute isAuthenticated={isAuthenticated}>
-                    <Home />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/alunos"
-                element={
-                  <ProtectedRoute isAuthenticated={isAuthenticated}>
-                    <AlunoList />
-                  </ProtectedRoute>
-                }
-              />
-               <Route
-                path="/notificacoes"
-                element={
-                  <ProtectedRoute isAuthenticated={isAuthenticated}>
-                    <Notifications />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/alunos/novo"
-                element={
-                  <ProtectedRoute isAuthenticated={isAuthenticated}>
-                    <AlunoForm />
-                  </ProtectedRoute>
-                }
-              />
-
-            </Routes>
-          </Box>
-          <Footer />
-        </Box>
-        </Layout>
-      </Router>
+                  {/* Rotas protegidas */}
+                  <Route
+                    path="/*"
+                    element={
+                      <ProtectedRoute>
+                        <Home />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/alunos"
+                    element={
+                      <ProtectedRoute>
+                        <AlunoList />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/notificacoes"
+                    element={
+                      <ProtectedRoute>
+                        <Notifications />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/alunos/novo"
+                    element={
+                      <ProtectedRoute>
+                        <AlunoForm />
+                      </ProtectedRoute>
+                    }
+                  />
+                </Routes>
+              </Box>
+              <Footer />
+            </Box>
+          </Layout>
+        </Router>
+      </AuthProvider>
     </ChakraProvider>
   );
 }

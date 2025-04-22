@@ -15,6 +15,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/api'; // Ajuste o caminho para sua service
 import fotolago from '../assets/fotolago.jpg';
+import { useAuth } from '../context/AuthContext';
 
 interface LoginCredentials {
   email: string;
@@ -29,6 +30,7 @@ const Signin: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
+  const { login: authLogin } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,7 +57,8 @@ const Signin: React.FC = () => {
         isClosable: true,
       });
   
-      navigate('/*');
+      /* authLogin(token); */
+      navigate('/*'); // Redireciona para a página inicial após o login
     } catch (error: any) {
       toast({
         title: 'Erro no login',
@@ -76,7 +79,7 @@ const Signin: React.FC = () => {
   return (
     <ChakraProvider>
       <Box
-        h="85vh" // Altura exata da viewport
+        h="100vh" // Altura exata da viewport
         display="flex"
         alignItems="center"
         justifyContent="center"

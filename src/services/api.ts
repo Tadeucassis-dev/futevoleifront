@@ -20,6 +20,25 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Interceptor para lidar com respostas de erro
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('Erro na resposta da API:', {
+      status: error.response?.status,
+      data: error.response?.data,
+      message: error.message,
+    });
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      return Promise.reject(new Error('Acesso negado: Verifique suas credenciais ou permissões'));
+    }
+    if (!error.response?.headers['content-type']?.includes('application/json')) {
+      return Promise.reject(new Error(`Resposta inválida do servidor: ${error.response?.data || 'Conteúdo não-JSON'}`));
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Métodos de autenticação
 export const login = (credentials: { email: string; password: string }) =>
   api.post<{ token: string }>('/login', credentials);
@@ -39,7 +58,7 @@ export const createAluno = async (aluno: {
   ativo: boolean;
   telefone?: string;
   dataNascimento?: string;
-  diaVencimentoMensalidade?: number | null; // Permite null
+  diaVencimentoMensalidade?: number | null;
 }) => {
   const response = await api.post('/alunos', aluno);
   return response.data;
@@ -53,7 +72,7 @@ export const updateAluno = async (
     ativo: boolean;
     telefone?: string;
     dataNascimento?: string;
-    diaVencimentoMensalidade?: number | null; // Permite null
+    diaVencimentoMensalidade?: number | null;
   }
 ) => {
   const response = await api.put(`/alunos/${id}`, aluno);
@@ -62,11 +81,31 @@ export const updateAluno = async (
 
 export const deleteAluno = async (id: number) => api.delete(`/alunos/${id}`);
 
-// Método de notificações
-export const sendManualNotification = async (alunoId: number, mensagem: string) => {
+// Métodos de notificações
+export const sendManualNotification = async (alunoId: number, mensagem: string): Promise<string> => {
   const response = await api.post(`/notificacoes/${alunoId}`, { mensagem });
   console.log('Resposta de sendManualNotification:', response);
   return response.data;
+};
+
+export const sendNotificationToAll = async (mensagem: string): Promise<string> => {
+  try {
+    const response = await api.post('/notificacoes/todos', { mensagem });
+    console.log('Status da resposta:', response.status);
+    console.log('Corpo da resposta:', response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error('Erro ao enviar notificação em massa:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    throw new Error(
+      error.response?.data?.message ||
+      error.message ||
+      `Erro ao enviar notificação em massa (status: ${error.response?.status || 'desconhecido'})`
+    );
+  }
 };
 
 // Métodos de check-ins

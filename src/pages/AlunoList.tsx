@@ -224,10 +224,10 @@ const AlunoList: React.FC = () => {
       py={[8, 12]}
       position="relative"
     >
-      <Heading as="h2" size="lg" mb={10} textAlign="center" p={4} borderRadius="md">
+      <Heading as="h2" size="lg" mb={2} textAlign="center" p={4} borderRadius="md">
         Lista de Alunos
       </Heading>
-      <Button colorScheme="yellow" mb={4} onClick={handleOpenCreate}>
+      <Button colorScheme="yellow" mb={2} onClick={handleOpenCreate}>
         Adicionar Aluno
       </Button>
       <Box
@@ -243,7 +243,7 @@ const AlunoList: React.FC = () => {
             <Tr>
               <Th color={'#000'}>Nome</Th>
               <Th color={'#000'}>Email</Th>
-              <Th color={'#000'}>Telefone</Th>
+              <Th w={'200px'} color={'#000'}>Telefone</Th>
               <Th color={'#000'}>Nascimento</Th>
               <Th color={'#000'}>Vencimento</Th>
               <Th color={'#000'}>Status</Th>
