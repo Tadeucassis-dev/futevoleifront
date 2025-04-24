@@ -12,7 +12,7 @@ import { ProtectedRoute } from "../components/ProtectedRoute";
 import { Layout } from "../components/Layout";
 import Notifications from "../pages/Notifications";
 import { AuthProvider } from "../context/AuthContext";
-
+import Pagamentos from "../pages/Pagamentos";
 export function AppRoutes() {
   return (
     <ChakraProvider theme={theme}>
@@ -56,6 +56,14 @@ export function AppRoutes() {
                     element={
                       <ProtectedRoute>
                         <AlunoForm />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/pagamentos"
+                    element={
+                      <ProtectedRoute>
+                        <Pagamentos />
                       </ProtectedRoute>
                     }
                   />

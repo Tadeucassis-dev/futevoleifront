@@ -22,3 +22,12 @@ export interface Aluno {
     diaVencimentoMensalidade: number;
     pago: boolean;
   }
+
+  export interface Payment {
+    id: number;
+    studentId: number;
+    amount: number;
+    status: string;
+    qrCode: string;
+    createdAt: string;
+  }

@@ -66,6 +66,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             >
               Notificações
             </Button>
+            <Button
+              as={NavLink}
+              to="/pagamentos"
+              justifyContent="flex-start"
+              _activeLink={{ bg: "yellow.400" }}
+              _hover={{ bg: "yellow.300" }}
+              onClick={onClose}
+            >
+              Pagamentos
+            </Button>
           </VStack> 
         </DrawerBody>
       </DrawerContent>
