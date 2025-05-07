@@ -13,6 +13,9 @@ import { Layout } from "../components/Layout";
 import Notifications from "../pages/Notifications";
 import { AuthProvider } from "../context/AuthContext";
 import Pagamentos from "../pages/Pagamentos";
+import { Fotos } from "../pages/Fotos";
+
+
 export function AppRoutes() {
   return (
     <ChakraProvider theme={theme}>
@@ -32,6 +35,15 @@ export function AppRoutes() {
                     element={
                       <ProtectedRoute>
                         <Home />
+                      </ProtectedRoute>
+                    }
+                  />
+                 
+                 <Route
+                    path="/fotos"
+                    element={
+                      <ProtectedRoute>
+                        <Fotos />
                       </ProtectedRoute>
                     }
                   />

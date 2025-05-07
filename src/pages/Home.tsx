@@ -3,11 +3,9 @@ import {
   Box,
   Text,
   VStack,
-  Image,
-  Flex,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import raiz from "../assets/raiz.png";
+import Shark1 from "../assets/Shark1.jpeg"; 
 
 export function Home() {
   const textSize = useBreakpointValue({ base: "md", md: "lg", lg: "xl" });
@@ -16,10 +14,9 @@ export function Home() {
     <Box
       h="calc(100vh - 68px - 53px)" 
       w="100%"
-      bgImage={`url(${raiz})`}
+      bgImage={`url(${Shark1})`}
       bgSize="cover"
       bgPosition="center"
-      bgColor="rgba(0, 0, 0, 0.7)"
       bgBlendMode="overlay"
       display="flex"
       alignItems="center"
@@ -57,22 +54,19 @@ export function Home() {
         >
           Junte-se à comunidade mais vibrante de futevôlei! Treine, jogue e viva a emoção do esporte na areia!
         </Text>
-        <Flex
+        {/* <Flex
           justify="center"
           w="100%"
           maxW={{ base: "90%", md: "600px" }}
           mb={4}
         >
           <Image
-            src={raiz}
-            alt="Jogadores de futevôlei na praia"
+            src={fotolago}
+            alt="Futevôlei"
             borderRadius="md"
             boxShadow="lg"
-            objectFit="cover"
-            w="100%"
-            h={{ base: "150px", md: "200px" }} 
           />
-        </Flex>
+        </Flex> */}
         <Text fontSize="18px" color="gray.200" mt={2}>
           Treinos incríveis, competições emocionantes e uma vibe única à beira do lago.
         </Text>

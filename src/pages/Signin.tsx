@@ -48,7 +48,7 @@ const Signin: React.FC = () => {
       const response = await login(credentials);
       const { token } = response.data; // O backend retorna { "token": "jwt_aqui" }
   
-      localStorage.setItem('jwt_token', token);
+      authLogin(token);
   
       toast({
         title: 'Login bem-sucedido',
@@ -79,7 +79,7 @@ const Signin: React.FC = () => {
   return (
     <ChakraProvider>
       <Box
-        h="100vh" // Altura exata da viewport
+        h="100vh" // Altura total da tela
         display="flex"
         alignItems="center"
         justifyContent="center"

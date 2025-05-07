@@ -38,6 +38,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </Button>
             <Button
               as={NavLink}
+              to="/fotos"
+              justifyContent="flex-start"
+              _activeLink={{ bg: "yellow.400" }}
+              _hover={{ bg: "yellow.300" }}
+              onClick={onClose}
+            >
+              Fotos
+            </Button>
+            <Button
+              as={NavLink}
               to="/alunos"
               justifyContent="flex-start"
               _activeLink={{ bg: "yellow.400" }}

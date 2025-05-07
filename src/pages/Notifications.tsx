@@ -61,7 +61,7 @@ const Notifications: React.FC = () => {
     }
 
     const aluno = alunos.find((a) => a.id === alunoId);
-    console.log('Telefone do aluno:', aluno?.telefone);
+    console.log('Enviando para aluno:', alunoId, aluno?.nome, aluno?.email);
     if (!aluno?.telefone) {
       toast({
         title: 'Erro',
