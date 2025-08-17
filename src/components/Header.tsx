@@ -7,7 +7,7 @@ export function Header({ onOpen }: { onOpen: () => void }) {
     <Box
       as="header"
       bg="#1C1C1C"
-      p="10px"
+      p="4px"
       position="fixed"
       top={0}
       left={0}
@@ -43,6 +43,7 @@ export function Header({ onOpen }: { onOpen: () => void }) {
         >
           Futevôlei do Lago
         </Text>
+        
       </Flex>
     </Box>
   );
